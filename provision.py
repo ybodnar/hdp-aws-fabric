@@ -10,10 +10,10 @@ AMI = "ami-02dc4c6b"
 params = {"image_id": AMI,
           "key_name": "aws_rsa",
           "instance_type": "m3.medium",
-          "security_group_ids": ["sg-3a34f05e"],
-          "subnet_id": "subnet-a274d5fb"}
+          "security_group_ids": ["~"],
+          "subnet_id": "~"}
 SSH_USER = "ec2-user"
-SSH_KEY = "/Users/yuriybodnar/.ssh/aws_rsa"
+SSH_KEY = "~/.ssh/aws_rsa"
 
 def get_connection():
     return boto.ec2.connect_to_region("us-east-1")
