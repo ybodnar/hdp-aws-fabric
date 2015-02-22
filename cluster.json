@@ -1,0 +1,14 @@
+{
+  "blueprint" : "single-node-hdfs-yarn",
+  "default_password" : "my-super-secret-password",
+  "host_groups" :[
+    {
+      "name" : "host_group_1",
+      "hosts" : [
+        {
+          "fqdn" : "PARAM_HOST_NAME"
+        }
+      ]
+    }
+  ]
+}
