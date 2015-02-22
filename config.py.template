@@ -1,0 +1,20 @@
+aws_region_name = "us-east-1"
+aws_ami = "ami-******"
+aws_key_name = "id_rsa"
+aws_ami_default_user = "ec2-user"
+ec2_instance_type = "t1.micro"
+ec2_security_group_id = "sg-01234"
+ec2_subnet_id = "subnet-abc1234"
+ssh_key = "/home/user/.ssh/aws_rsa"
+initialization_timeout_seconds = 120
+ambari_repo_url = "http://public-repo-1.hortonworks.com/ambari/centos6/1.x/updates/1.7.0/ambari.repo"
+ambari_blueprint_file = "cluster/blueprint.json"
+ambari_cluster_file = "cluster/cluster.json"
+ec2_configurations = {
+    "master_node": {"image_id": aws_ami,
+                    "key_name": aws_key_name,
+                    "instance_type": ec2_instance_type,
+                    "security_group_ids": [ec2_security_group_id],
+                    "subnet_id": ec2_subnet_id}
+}
+
