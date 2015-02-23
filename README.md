@@ -2,6 +2,7 @@
 hdp-aws-fabric
 
 todo:
-  - HDP setup
+  - HDP multi node setup
   - EBS configuration
-  - multiple nodes
+  - Fix logging mess
+  - Add different cluster profiles (HBase, Sqoop, etc.)
