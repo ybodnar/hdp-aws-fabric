@@ -1,9 +1,11 @@
 __author__ = 'yuriybodnar'
+
 import boto.ec2
 import time
+import logging
+
 
 class Ec2Service:
-
     def __init__(self, config):
         self.config = config
         pass
@@ -17,7 +19,7 @@ class Ec2Service:
             raise Exception("Did not get instance Id")
         return myInstanceId
 
-    def get_instance(self, connection_,instance_id_):
+    def get_instance(self, connection_, instance_id_):
         result = None
         for instance in connection_.get_all_reservations(instance_ids=[instance_id_])[0].instances:
             if instance.id in instance_id_:
@@ -33,16 +35,16 @@ class Ec2Service:
 
         instance_id = self.get_instance_id(reservation)
 
-        print "Instance ID:", instance_id
+        logging.info("Instance ID: %s" % instance_id)
         time.sleep(10)
 
         instance = self.get_instance(self.connection, instance_id)
         while instance.state not in "running":
-            print 'Waiting for instance to init'
-            print "Instance state:", instance.state
+            logging.warn('Waiting for instance to init')
+            logging.info("Instance state:%s" % instance.state)
             time.sleep(5)
             instance = self.get_instance(self.connection, instance_id)
 
-        print "Instance state:", instance.state
-        print "Instance Public DNS:", instance.public_dns_name
+        logging.info("Instance state: %s" % instance.state)
+        logging.info("Instance Public DNS: %s" % instance.public_dns_name)
         return instance
