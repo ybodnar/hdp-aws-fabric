@@ -73,6 +73,7 @@ class FabricConfigurator:
     def start_ambari_agent(self):
         time.sleep(15)
         sudo("{ambari_agent} start".format(ambari_agent=AMBARI_AGENT_INIT_SCRIPT), pty=False)
+        time.sleep(10)
 
     def allow_sudo_without_tty(self):
         sed(SUDOERS_FILE, before="Defaults    requiretty", after="#Defaults    requiretty", use_sudo=True)
