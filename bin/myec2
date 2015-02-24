@@ -1,0 +1,54 @@
+#!/usr/bin/env python
+#small CLI utility for listing and controlling EC2 instances
+
+__author__ = 'yuriybodnar'
+
+import logging
+import argparse
+from hdpaws.ec2service import Ec2Service
+
+
+def pretty_print_instance_list(ec2_instances):
+    template = "{id:12}{state:15}{dns:25}"
+    res = [template.format(id=instance.id, state=instance.state, dns=instance.public_dns_name) for instance in
+           ec2_instances]
+    print template.format(id="id", state="state", dns="public dns")
+    for item in res:
+        print item
+
+
+def process_instance_command(command):
+    try:
+        processed_instances = command()
+        logging.warning("affected instances: %s" % ",".join([i.id for i in processed_instances]))
+    except ValueError as error:
+        logging.error(error.message)
+
+
+def config_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("command")
+    parser.add_argument("instance", nargs="?")
+    return parser.parse_args()
+
+aws_region_name = "us-east-1"
+
+if __name__ == '__main__':
+    args = config_args()
+
+    #todo: WAT?
+    class config:
+        aws_region_name = "us-east-1"
+
+    ec2 = Ec2Service(config)
+
+    if args.command in "list":
+        pretty_print_instance_list(ec2.get_instances())
+    elif args.command in "stop":
+        process_instance_command(lambda: ec2.stop_instance(args.instance))
+    elif args.command in "start":
+        process_instance_command(lambda: ec2.start_instance(args.instance))
+    elif args.command in "terminate":
+        process_instance_command(lambda: ec2.terminate_instance(args.instance))
+    else:
+        logging.error("command %s is not supported" % args.command)
