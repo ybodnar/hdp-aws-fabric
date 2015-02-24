@@ -8,7 +8,7 @@ import logging
 class Ec2Service:
     def __init__(self, config):
         self.config = config
-        pass
+        self.connection = self.get_connection()
 
     def get_connection(self):
         return boto.ec2.connect_to_region(self.config.aws_region_name)
@@ -48,3 +48,28 @@ class Ec2Service:
         logging.info("Instance state: %s" % instance.state)
         logging.info("Instance Public DNS: %s" % instance.public_dns_name)
         return instance
+
+    def get_instances(self):
+        connection = self.get_connection()
+        reservations = connection.get_all_reservations()
+        instances = []
+        for reservation in reservations:
+            instances = instances + reservation.instances
+        return instances
+
+    def stop_instance(self, instance_id):
+        _validate(instance_id)
+        return self.connection.stop_instances(instance_ids=[instance_id])
+
+    def start_instance(self, instance_id):
+        _validate(instance_id)
+        return self.connection.start_instances(instance_ids=[instance_id])
+
+    def terminate_instance(self, instance_id):
+        return self.connection.terminate_instances(instance_ids=[instance_id])
+
+def _validate(instance_id):
+    if not instance_id:
+        raise ValueError("Must provide instance id to start instance")
+
+
